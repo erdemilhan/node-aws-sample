@@ -1,11 +1,26 @@
 
-var AWS = require("aws-sdk");
+const { Rekognition } = require("@aws-sdk/client-rekognition");
+const express = require('express');
 
-AWS.config.getCredentials(function(err) {
-  if (err) console.log(err.stack);
-  // credentials not loaded
-  else {
-    console.log("Access key:", AWS.config.credentials.accessKeyId);
-    console.log("Region: ", AWS.config.region);
+const app = express();
+const port = 3000;
+
+const client = new Rekognition({ region: "eu-central-1" });
+const params = {
+    /** input parameters */
+  };
+
+
+ app.get('/getProjects', async (req,res) => {
+  console.log('Received /getProjects request');
+  try{
+    const data = await client.describeProjects(params);
+    res.send(data);
+  }catch(error){
+    res.send("Error receiving response " + err.$$metadata);
   }
+  
 });
+
+
+app.listen(port, () => console.log(`Rekognition API started...`));
